@@ -23,9 +23,11 @@ All wrapped in a simple GUI build in Tkinter.
  
 
 <h3>Demo:</h3>
+Root screen:
+
 ![Screenshot](qualiDataRoot.png)
 
-
+Graph screen: 
 ![Screenshot](qualiDataGraphs.png)
 
 
