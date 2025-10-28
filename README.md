@@ -9,4 +9,4 @@ Projects:
        Analyses telemetry (speed vs distance) of the top 3 qualifiers.
        Tools: FastF1, Matplotlib, Pandas, Google Colab, MATLAB.
 
-- fastf1QualifyingGraphs - this project takes the .ipynb code and adds a GUI. Gives the user the ability to select a race and year to view data on qualifying. Check folder README.md for more details
+- fastf1QualifyingGraphs - this project takes the .ipynb code and adds a GUI. Gives the user the ability to select a race and year to view data on qualifying. Check folder README.md for more details.
