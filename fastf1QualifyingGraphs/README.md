@@ -25,6 +25,7 @@ All wrapped in a simple GUI build in Tkinter.
 <h3>Demo:</h3>
 ![Screenshot](qualiDataRoot.png)
 
+
 ![Screenshot](qualiDataGraphs.png)
 
 
