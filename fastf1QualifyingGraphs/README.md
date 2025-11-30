@@ -37,7 +37,7 @@ Tkinter:
 ![Screenshot](qualiDataRoot.png)
 
 Graph screen: 
-![Screenshot](qualiDataGraphs.png)
+![Screenshot](dataGraphsNew.png)
 
 CLI command: python cli.py Brazil 2024
 ![Screenshot](cliImage2.png)
