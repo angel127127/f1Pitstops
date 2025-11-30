@@ -21,20 +21,18 @@ if not os.path.exists(cache_dir):
 def extract(value):
     return value.get() if hasattr(value, "get") else value
 
-def getQualiData(gpLocation, gpYear, use_gui):
-  fastf1.Cache.enable_cache(cache_dir)
-  # get data
-  try:
-    #set variables, get session data
-    gpLocation = extract(gpLocation)
-    gpYear = extract(gpYear)
-    gpYear = int(gpYear)
+# retrieves and filters data
+def fetchData(gpYear, gpLocation):
     logging.info("Requesting telemetry: year = %s race = %s session = Q", gpYear, gpLocation)
     session = fastf1.get_session(gpYear, gpLocation, 'Q')
     session.load()
     logging.info("Session loaded, Drivers found = %s", list(session.results['Abbreviation']))
 
     results = session.results
+    return session, results
+
+# processes data, extracts features
+def processData(session, results):
     q3_qualifiers = results[:10]
     top3_qual = results[:3]
     q3_drivers = q3_qualifiers['Abbreviation']
@@ -76,12 +74,14 @@ def getQualiData(gpLocation, gpYear, use_gui):
     # setup plotting
     df = pd.DataFrame(fastest_lap)
     df['TeamColour'] = ['#'+session.get_driver(d).TeamColor for d in df['Driver']]
+    return df, fastest_lap, telemetry_data, na_drivers
 
+def generateGraphs(session, df, fastest_lap, telemetry_data, na_drivers, gpLocation, gpYear, use_gui, root_widget):
     plotting.setup_mpl()
 
     if use_gui:
         # create a new window for the plots
-        plot_window = tk.Toplevel(root)
+        plot_window = tk.Toplevel(root_widget)
         plot_window.title(f"Qualifying Visualizations - {gpLocation} {gpYear}")
         plot_window.rowconfigure(0, weight=1)
         plot_window.columnconfigure(0, weight=1)
@@ -106,7 +106,7 @@ def getQualiData(gpLocation, gpYear, use_gui):
     ax1.set_xlabel('Distance (m)')
     ax1.set_ylabel('Speed (km/h)')
 
-    for driver in top3_drivers:
+    for driver in telemetry_data.keys():
       telemetry = telemetry_data[driver]
       colour = '#' + session.get_driver(driver).TeamColor
       ax1.plot(telemetry['Distance'], telemetry['Speed'], color=colour, label=driver)
@@ -164,6 +164,17 @@ def getQualiData(gpLocation, gpYear, use_gui):
         combined_fig.tight_layout()
         plt.show()
 
+def getQualiData(gpLocation, gpYear, use_gui, root_widget=None):
+  fastf1.Cache.enable_cache(cache_dir)
+  # get data
+  try:
+    #set variables, get session data
+    gpLocation = extract(gpLocation)
+    gpYear = int(extract(gpYear))
+    session, results = fetchData(gpYear, gpLocation)
+    df, fastest_laps, telemetry_data, na_drivers = processData(session, results)
+    generateGraphs(session, df, fastest_laps, telemetry_data, na_drivers, gpLocation, gpYear, use_gui, root_widget)
+
   except ValueError:
     messagebox.showinfo("Not valid race or year", "Please enter a valid race location and year.")
   except Exception as e:
@@ -188,7 +199,7 @@ if __name__ == "__main__":
     gpEntry = tk.Entry(inputFrame, width=20, relief=tk.GROOVE)
     yearLabel = tk.Label(inputFrame, text="Year: ", fg="white", bg="#2b2b2b")
     yearEntry = tk.Entry(inputFrame, width = 20, relief=tk.GROOVE)
-    enterButton = tk.Button(inputFrame, text="Go", bg="#007acc", fg="white", activeforeground="blue", relief=tk.RAISED, bd=3, command=lambda: getQualiData(gpEntry, yearEntry, True)) # lambda to delay func call
+    enterButton = tk.Button(inputFrame, text="Go", bg="#007acc", fg="white", activeforeground="blue", relief=tk.RAISED, bd=3, command=lambda: getQualiData(gpEntry, yearEntry, True, root)) # lambda to delay func call
 
     # placing attributes
     gpLabel.grid(row=0, column=0, padx=10, pady=10, sticky="w")
