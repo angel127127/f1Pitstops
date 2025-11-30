@@ -1,6 +1,7 @@
 <h1> F1 Qualifying Visualisation Tool </h1>
 
-An interactive Python app that visualises Formula 1 qualifying data using FastF1, Tkinter and Matplotlib.
+A Python tool to fetch, process, and visualise F1 qualifying telemetry data using [FastF1](https://github.com/theOehrly/Fast-F1).  
+Supports both GUI (Tkinter) and CLI usage.
 
 It lets you select any Grand Prix and year, then displays:
 
@@ -8,52 +9,67 @@ It lets you select any Grand Prix and year, then displays:
 
 - Lap times for all drivers in Q3
 
-All wrapped in a simple GUI build in Tkinter.
+- The throttle and brake percentage applied across the fastest lap for top 3 qualifiers
+
 
 
 <h3>Features:</h3>
 
-  - Fetches live F1 session data from FastF1's API
- 
-  - Caches session data locally for faster reloads
- 
-  - Simple interactive UI built with Tkinter
- 
-  - Error handling for invalid races or years
+- Speed vs Distance plots for top 3 qualifiers
+  
+- Fastest lap times for top 10 Q3 drivers, including handling missing laps
+
+- Throttle/Brake input comparison graphs
+
+- Caches data locally
+
+- Logging for data processing and missing data detection
+
+
+- Works in GUI and CLI
+
+- Developed iteratively from Google Colab → Python script → GUI → CLI
  
 
 <h3>Demo:</h3>
-Root screen:
+Tkinter:
 
 ![Screenshot](qualiDataRoot.png)
 
 Graph screen: 
 ![Screenshot](qualiDataGraphs.png)
 
+CLI command: python cli.py Brazil 2024
+![Screenshot](cliImage2.png)
 
-Dependencies: Python 3.9+, fastf1, matplotlib, pandas, numpy
 
-<h3>How to run:</h3>
+Dependencies: Python 3.9+, fastf1, matplotlib, pandas, Tkinter, CLI via argparse, Cloud prototyping
 
-- Clone repo: git clone https://github.com/angel127127/f1Pitstops/
+<h3>Installation</h3>
 
-- cd fastf1QualifyingGraphs
+git clone https://github.com/yourusername/f1QualifyingGraphs.git
 
-- Enter a Grand Prix name and year (eg Monaco, 2021) and click Go
+cd f1QualifyingGraphs
+
+pip install -r requirements.txt
+
 
 <h3>Challenges:</h3>
 
 - Handling raw F1 data
 
-- Ui embedding with Matplotlib
+- UI embedding with Matplotlib
 
 - Error handling
 
 - Layout management
+  
 
 <h3>Future improvements:</h3>
 
 - Include sector-by-sector analysis
+
+- Docker packaging for easier deployment
 
 - Add more graphs to dashboard, ie factoring in tyre compounds
 
